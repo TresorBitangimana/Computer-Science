@@ -17,7 +17,7 @@ public class Main {
  * n log n n-log n 
  * n^2 Quadratic             0(n^2)
  * n^3 cubic
- * 2^n Experimental               
+ * 2^n Expenential               
  * 
  * 
  * examples:
