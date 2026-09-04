@@ -194,14 +194,35 @@ date >> listing.txt
 5. Run one successful and one failing command, saving normal output and errors separately.
 
 ```
-ls > output.txt 2> errors.txt -> successful
+ls > output.txt 2> errors.txt -> successful attempt
 
-ls /helloWorld > output2.txt 2> errors2.txt -> failed
+ls /helloWorld > output2.txt 2> errors2.txt -> failed attempt
 ```
 
 ## Part 7 — Permissions
 
 Create `practice/run-me`, add owner execute permission, remove group/other write permission, and display the result. Explain every permission bit shown.
+
+```
+cd -> navigates to the home directory
+
+chmod u+x ~/cosc30503/lab01/practice/run-me -> chmod changes the permission of a file `u` specifies the user and `+x` adds the permission
+
+chmod go-w ~/cosc30503/lab01/practice/run-me -> removed the write permission for group/others
+
+cd cd cosc30503/lab01/practice/run-me -> nagivates to the directory
+
+ls -ld -> permission output `drwxr-xr-x`
+
+d -> first bit represents the directory
+
+rwx -> the following 3 bits `rwx` represents the owners permisions read, write, and execute.
+
+r-x -> the following 3bits `r-x`represents the group permissions read and execute only since it is missin the write permission
+
+r-x -> and the last 3 bits `r-x` represents the permision of others, similar to group.
+
+```
 
 ## Challenge
 
