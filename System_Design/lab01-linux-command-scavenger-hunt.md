@@ -241,10 +241,23 @@ find /usr/bin -type f -executable -name "git*"
 3. Identify the largest regular file within your lab workspace.
 
 ```
+cd ~/cosc30503/lab01 -> navigates to the lab01 directory.
 
+ls -lh | du -h | sort -rh | head -n 1
+
+ls -lh -> list the files in the directory with human readate data type
+du -h -> shows the disk usage of each file.
+sort rh -> sorts the files in reverse to get the highest disk usage on top size the shell automatically arrage the files from smallest to largest
+head -n 1 -> displays only the first file in the list which is the largest disk usage file sinse the list is reversed.
 ```
 
 4. Find a useful command you had not previously used and cite the documentation that explains it.
+
+```
+apropos - search the manual page names and descriptions
+
+man apropos
+```
 
 ## Deliverables
 
