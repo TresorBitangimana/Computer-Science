@@ -227,8 +227,23 @@ r-x -> and the last 3 bits `r-x` represents the permision of others, similar to 
 ## Challenge
 
 1. Count environment variables in the current environment.
+
+```
+env | wc -l
+```
+
 2. Find executables in a directory on `PATH` whose names begin with `git`.
+
+```
+find /usr/bin -type f -executable -name "git*"
+```
+
 3. Identify the largest regular file within your lab workspace.
+
+```
+
+```
+
 4. Find a useful command you had not previously used and cite the documentation that explains it.
 
 ## Deliverables
