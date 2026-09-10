@@ -1,0 +1,144 @@
+public class LinkedList<E> {
+    // ---------------- nested Node class ----------------
+    private static class Node<E> {
+        private E data; // reference to the data stored at this node
+        private Node<E> next; // reference to the subsequent node in the list
+
+        public Node(E e, Node<E> n) {
+            data = e;
+            next = n;
+        }
+
+        public E getData() {
+            return data;
+        }
+
+        public Node<E> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<E> n) {
+            next = n;
+        }
+    }
+
+    // instance variables of the LinkedList
+    private Node<E> head = null; // head node of the list (or null if empty)
+    private Node<E> tail = null; // last node of the list (or null if empty)
+    private int size = 0; // number of nodes in the list
+
+    public LinkedList() {
+    } // constructs an initially empty list
+    // access methods
+
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public E first() { // returns (but does not remove) the first data
+        if (isEmpty())
+            return null;
+        return head.getData();
+    }
+
+    public E last() { // returns (but does not remove) the last data
+        if (isEmpty())
+            return null;
+        return tail.getData();
+    }
+
+    // update methods
+    public void addFirst(E e) { // adds data e to the front of the list
+        head = new Node<>(e, head); // create and link a new node
+        if (size == 0)
+            tail = head; // special case: new node becomes tail also
+        size++;
+    }
+
+    public void addLast(E e) { // adds data e to the end of the list
+        Node<E> newest = new Node<>(e, null); // node will eventually be the tail
+        if (isEmpty())
+            head = newest; // special case: previously empty list
+        else
+            tail.setNext(newest); // new node after existing tail
+        tail = newest; // new node becomes the tail
+        size++;
+    }
+
+    public E removeFirst() { // removes and returns the first data
+        if (isEmpty())
+            return null; // nothing to remove
+        E answer = head.getData();
+        head = head.getNext(); // will become null if list had only one node
+        size--;
+        if (size == 0)
+            tail = null; // special case as list is now empty
+        return answer;
+    }
+
+    public E removeLast() { // removes and returns the last data
+        if (isEmpty())
+            return null; // nothing to remove
+        E answer = tail.getData();
+        if (head == tail) { // check for only one item on the list
+            head = null;
+            tail = null;
+            size = 0;
+            return answer;
+        }
+        Node<E> p = head; // find the next to last item
+        Node<E> prev;
+        do {
+            prev = p;
+            p = p.next;
+        } while (p != tail);
+        tail = prev; // make the next to last item the last item
+        prev.next = null;
+        size--;
+        return answer;
+    }
+
+    public int indexOf(E e) { // return the position of a value in the list
+        if (isEmpty())
+            return -1;
+        Node<E> p = head;
+        for (int i = 0; i < size; i++) {
+            if (e.equals(p.data))
+                return i;
+            p = p.next;
+        }
+        return -1;
+    }
+
+    public boolean contains(E e) {
+        return indexOf(e) >= 0;
+    }
+
+    public static void main(String[] args) {
+        LinkedList<String> list = new LinkedList<String>();
+        list.addFirst("one");
+        list.addFirst("two");
+        list.addLast("zero");
+        System.out.println(list.indexOf("one"));
+        System.out.println(list.removeFirst());
+        System.out.println(list.indexOf("two"));
+        System.out.println(list.last());
+        System.out.println(list.first());
+        System.out.println(list.removeLast());
+        System.out.println(list.removeLast());
+        System.out.println();
+        LinkedList<Integer> listInts = new LinkedList<Integer>();
+        listInts.addFirst(1);
+        listInts.addFirst(2);
+        listInts.addLast(0);
+        System.out.println(listInts.contains(1));
+        System.out.println(listInts.removeFirst());
+        System.out.println(listInts.contains(2));
+        System.out.println(listInts.last());
+        System.out.println(listInts.first());
+    }
+}
