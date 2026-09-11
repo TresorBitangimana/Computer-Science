@@ -37,15 +37,68 @@ After completing this assignment, you should be able to:
 ### Part 1 — Commands and documentation
 
 1. Explain why `cd` must be implemented as a shell built-in rather than only as an external program. Include a short demonstration or example in your explanation.
+
+```
+cd has to be a shell built-in command because it needs to be able to make changes to the parent shell, external commands run in a separent child process when extercuted and returns the results, then the process returns back to the parent shell, in this case the parent shell would not modified becausee everything happened in an external process. If the `cd` command was an exteral program, after running the command it would launch the external process, make the directory changes there and the process would return back the the parent shell but it would not have any modification because the changes happened in the child process. for example running `cd assignment02 &` this takes the process to a subshell where the command is exercuted and the process returns back to the parent shell but parent is not affected by the command.
+```
+
 2. Use a command to search manual-page names and descriptions for the keyword `archive`. Record the command and identify two relevant results.
+
+```
+apropos archive -> serches for commands thats maches or have the keyword archive in its description
+
+relavant results:
+ar (1)               - create, modify, and extract from archives
+cpio (1)             - copy files to and from archives
+```
+
 3. Show how to obtain help for the Bash built-in `history`. Then show how to open the manual page for the external command `ls`. Explain why the documentation methods differ.
+
+```
+`help history` -> to obtain help for the built-in history command
+
+`man ls` - to open the manual page for `ls`
+
+These two commands differs because `history` is a built in command and `ls` is an external command. External commands have their own dedicated manual page so they can be access with `man (command)`, but build it command do not, so to get help for build it commands you have to run `help (command)` or `man bash` where all the build it commands are documented.
+```
+
 4. Identify two commands that are Bash built-ins and two commands that are external executable files. Show how you verified each classification.
+
+```
+built in commands:
+pwd
+cd
+
+external commands:
+find
+grep
+
+To verify what type of command a command is you run `type (command)`, the output tell you whether the command is build it or external
+```
 
 ### Part 2 — The command search path
 
 5. Display your current `PATH` with one directory per line. Identify the first directory in which Bash finds `ls`.
+
+```
+echo $PATH | tr `:` '\n' -> `echo $PATH` displays the current PATH and the resuts is piped into the translate command `tr `:` `\n`` which reparate the path by the `:` with a new line.
+
+Bash find the `ls` command in `/usr/bin/ls` it can be found by running the command `which ls`.
+```
+
 6. Explain the risk of including `.` in `PATH`. If it were included, explain why its position relative to trusted system directories matters. Do not change your actual `PATH`.
+
+```
+Including `.` in `PATH` means that bash will also search your current directory for any executable files since `.` represents your current position in a directory.
+If it were included, its position would matter because bash searches for commands in `PATH` in order, if the position of `.` was at the beginning of `PATH` bash would search your directory first for any exercutable files, but if it was last bash would search your current directory last also.
+If your current directory was first and you happen to have any executable file with the same name as any trusted command like `cd`, bash would run the command found in your directory instead of the actual command you wanted, this could cause risk to security if you had a mallicious command in your current directory named `cd` and you tried to change directories, because the mallicous `cd` would run instead of the actual trusted `cd`.
+```
+
 7. Create an executable script named `hello` in your assignment directory. The script should contain only a shebang and one `echo` command. Run it using a relative pathname, and explain why typing only `hello` may not run it.
+
+```
+
+```
 
 ### Part 3 — Input, output, and errors
 

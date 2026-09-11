@@ -1,4 +1,11 @@
-public class LinkedList<E> {
+/**
+ * @author Tresor Bitangimana
+ * @since
+ *        LinkedList
+ */
+
+public class LinkedList<E extends Comparable<E>> {
+
     // ---------------- nested Node class ----------------
     private static class Node<E> {
         private E data; // reference to the data stored at this node
@@ -29,8 +36,8 @@ public class LinkedList<E> {
 
     public LinkedList() {
     } // constructs an initially empty list
-    // access methods
 
+    // access methods
     public int size() {
         return size;
     }
@@ -94,7 +101,7 @@ public class LinkedList<E> {
         Node<E> prev;
         do {
             prev = p;
-            p = p.next;
+            p = p.getNext();
         } while (p != tail);
         tail = prev; // make the next to last item the last item
         prev.next = null;
@@ -107,9 +114,9 @@ public class LinkedList<E> {
             return -1;
         Node<E> p = head;
         for (int i = 0; i < size; i++) {
-            if (e.equals(p.data))
+            if (e.equals(p.getData()))
                 return i;
-            p = p.next;
+            p = p.getNext();
         }
         return -1;
     }
@@ -118,27 +125,31 @@ public class LinkedList<E> {
         return indexOf(e) >= 0;
     }
 
-    public static void main(String[] args) {
-        LinkedList<String> list = new LinkedList<String>();
-        list.addFirst("one");
-        list.addFirst("two");
-        list.addLast("zero");
-        System.out.println(list.indexOf("one"));
-        System.out.println(list.removeFirst());
-        System.out.println(list.indexOf("two"));
-        System.out.println(list.last());
-        System.out.println(list.first());
-        System.out.println(list.removeLast());
-        System.out.println(list.removeLast());
-        System.out.println();
-        LinkedList<Integer> listInts = new LinkedList<Integer>();
-        listInts.addFirst(1);
-        listInts.addFirst(2);
-        listInts.addLast(0);
-        System.out.println(listInts.contains(1));
-        System.out.println(listInts.removeFirst());
-        System.out.println(listInts.contains(2));
-        System.out.println(listInts.last());
-        System.out.println(listInts.first());
+    // Implement the following three methods
+    // Then implement the main method to test your solution as described in the
+    // assignment
+    // You may add private methods, but do not change anything above this
+
+    // compare the current linked list against the parameter
+    // the lists are equal if they contain the same data items in the same order
+    @Override
+    public boolean equals(Object o) {
+        return false;
     }
+
+    // return a comma delimited string containing the data items in the linked list
+    @Override
+    public String toString() {
+        return null;
+    }
+
+    // sort the linked list using insertion sort and changing only Node references
+    public void sort() {
+
+    }
+
+    public static void main(String[] args) {
+
+    }
+
 }
