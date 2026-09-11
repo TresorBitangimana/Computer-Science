@@ -97,21 +97,112 @@ If your current directory was first and you happen to have any executable file w
 7. Create an executable script named `hello` in your assignment directory. The script should contain only a shebang and one `echo` command. Run it using a relative pathname, and explain why typing only `hello` may not run it.
 
 ```
+nano hello -> opens hello file in the editor.
+content:
+#!/bin/bash
+echo "Hello World!!!"
 
+save and exit nano
+
+chmod +x hello -> gives all users exectube access to hello, making it an executable.
+
+./hello -> runs the hello executable find using the relative path.
+
+typing only `hello` does not execute the file because bash treats it as a regular command and it goes into the `PATH` to look for the command, and since hello is not in the `PATH` the executable file hello is not found.
 ```
 
 ### Part 3 — Input, output, and errors
 
 8. Create a file named `names.txt` containing at least six unsorted names, one per line. Run `sort` so that it reads from `names.txt` and writes the sorted result to `sorted-names.txt`.
+
+```
+touch names.txt -> creates the names.txt file
+nano names.txt -> opens the file with nano
+
+content:
+Marcus
+Priya
+Olivia
+Deshawn
+Yuki
+Fatima
+
+cat names.txt | sort > sorted-names.txt -> runs the print command from names.txt and sort them into sorted-names.txt
+```
+
 9. Run a command that produces normal output and a separate error. Append standard output to `out.log` and standard error to `error.log` in the same command. Show the contents of both files.
+
+```
+ls . /lab3 > out.log 2> error.log
+
+the `ls . /lab3` command has two arguments, a valid path and a non valid parth, the valid path `.` runs and output the results in the out.log file and the `/lab3` does not exists so it throws an error and outputs the retutls in the error.log file.
+
+the line `> out.log 2> error.log` tells bash to output standard output in the out.log file, or if it throws an error to output standard error in the error.log.
+```
+
 10. Run another command that sends both standard output and standard error to a single file named `combined.log`. Explain the order and meaning of the redirections you used.
+
+```
+ls . /lab3 > combined.log 2>&1
+
+Similar to question 7, `ls . /lab3 > combined.log` logs the stdout into `combined.out` but `2>&1` tells bash to also direct the stderr to the same file where stdout is.
+```
+
 11. Suppose a student enters `cat first.txt >> second.txt` while intending to append `second.txt` to `first.txt`. Explain what actually happens and provide the correct command. Demonstrate with small sample files in your assignment directory.
+
+```
+the `cat first.txt >> second.txt` command concatenates the content of first.txt with the content of second.txt.
+
+the correct command to append the content of second.txt to first.txt is `cat second.txt >> first.txt.
+
+nano first.txt
+Content: hello this is the first file.
+
+nano second.txt
+Content: hello this is the second file.
+
+cat second.txt >> first.txt
+
+content of first.txt turns into:
+hello this is the first file.
+hello this is the second file.
+```
 
 ### Part 4 — History and command-line editing
 
 12. Intentionally enter a harmless misspelled command such as `srot names.txt`. Use two different Bash history or command-line editing techniques to correct it to `sort names.txt` and run the corrected command. Record both techniques.
+
+```
+srot names.txt
+fc
+
+`fc` which means fix command, when executed will open a text editor with your last command, edit the command with the correct one, save and close the editor then bash will re-execute your last command with the right from the editor
+
+srot names.txt
+^srot^sort^
+
+This automatically replaces your last command with the correct one, the first option is the previous misspelled command and the second option is the correct command, bash replaces the first command with the second command and re-execute it.
+```
+
 13. Display the five most recent commands in your Bash history. Explain what the history number represents and how to re-run a selected entry safely.
+
+```
+history | tail -5
+
+The history number is the Nth number of command that was executed in the bash shell, the so command with 100 at the beginig is the 100th command that was executed.
+
+you re-run the command you execute the command `!n` n being the history number.
+```
+
 14. Determine whether your current Bash command-line editing mode is Emacs or vi. Show the command used to inspect the setting, then show the command that would select the other mode. You do not need to make the change permanent.
+
+```
+bind -v | grep editing-mode -> find the current editing mode
+
+my current editing mode is emacs
+
+set -o vi -> changes the editing mode to vi
+```
 
 ### Part 5 — Jobs and shell sessions
 
