@@ -207,21 +207,121 @@ set -o vi -> changes the editing mode to vi
 ### Part 5 — Jobs and shell sessions
 
 15. In your own words, distinguish a foreground job, a background job, and a suspended job.
+
+```
+- A foreground job is a visible process, that a user can interact with.
+
+- A background job is a process running in the back, it is not visible to the user and they can not intereact with it
+
+- A suspended job is a process that has been paused.
+```
+
 16. Start `sleep 120` in the foreground, suspend it, display the job list, resume it in the background, return it to the foreground, and terminate it safely. Record each command or keystroke and the resulting job status.
+
+```
+sleep 120 -> starts a sleep program
+
+`^Z` | control Z -> suspends the program using the keyboard shortcut.
+
+jobs -> outputs a list of jobs that are currently running.
+
+bg %1 -> resumes the suspended job in the background.
+
+fg %1 -> brings the job back to the foreground.
+
+`^Z` then `kill %1` -> suspends the job with the keyboard shortcut `^Z` to bring back the input prompt and terminates the job with `kill %1`.
+
+the `1` after the `%` sign can be replaced with the design job id.
+
+```
+
 17. Explain what Bash normally does when you try to exit an interactive shell that has stopped jobs. Do not leave unfinished jobs running after your test.
+
+```
+Bash displays the message:
+
+logout
+There are stopped jobs.
+
+stopping you from exiting, then shows another input prompt, it does not allow you to exit while you have a job that has not completed, but when you exit a second time after the warning it allows you but the job remains active, bash kills the job.
+```
+
 18. Give three different ways to exit an interactive Bash session. For each, state whether it is a command, a built-in, or a keyboard action.
+
+```
+exit - shell build in command
+logout - shell build in command
+ctrl+D - keyboard shortcut
+```
 
 ### Part 6 — Quoting and parameter expansion
 
 19. Set `animal='red fox'`. Run commands that demonstrate the difference among `$animal`, `"$animal"`, and `'$animal'`. Explain word splitting and variable expansion in your results.
+
+```
+$animal -> outputs the actual value of the variable animal
+output: red fox
+
+"$animal" -> also outputs the actual value of the variable animal
+outpit: red fox
+
+'$animal' -> output the word inside the single quatation mark as it is, so the output would be `$animal`
+output: $animal
+
+No quatiation and double quatiation allows for variable expansion which outputs the value of the variable, but single quatation outputs everything inside the quatation as it is.
+
+```
+
 20. Create files named `report1.txt`, `report2.txt`, and `report-final.txt`. Demonstrate a glob that matches all three files and a glob that matches only the two numbered files. Explain each pattern.
+
+```
+ls report*.txt
+output:
+report1.txt  report2.txt  report-final.txt
+
+ls report[1-2].txt
+output:
+report1.txt  report2.txt
+
+the first glob matches all file starting with `report` and have any characters in between and ending with `.txt` which all files qualifies.
+
+the second glob only matches files starting with `report` and have either the number 1 or 2 in between and ending with `.txt` which only the two numbered files qualifies.
+```
+
 21. Set `country=usa` and use Bash parameter expansion to display the value in uppercase. Record the command and result.
+
+```
+country=usa -> sets the value of `coutnry` to `usa`
+
+echo $country
+output: usa
+
+echo ${country^^} echo's the output in uppercase
+output: USA
+
+```
+
 22. Write one safe `echo` or `printf` command that displays this text exactly, including the dollar sign and asterisk: `The cost is $5 * 3`. Explain the quoting you chose.
+
+```
+echo 'The cost is $5 * 3'
+
+single quataion allows for printing message with special characters as they are, any characters that have some function such as /, *, or $ do not take effect in single quatiatin marks.
+```
 
 ### Part 7 — Startup files and system information
 
 23. Explain the usual roles of `.bash_profile` and `.bashrc`. State which type of shell normally reads each file. Inspect your system and report which of these files exist in your home directory; do not modify them.
+
+```
+
+```
+
 24. Display the Bash version and the Linux kernel version running on your system. Record the commands and briefly distinguish the two version numbers.
+
+```
+
+```
 
 ## Deliverables
 
