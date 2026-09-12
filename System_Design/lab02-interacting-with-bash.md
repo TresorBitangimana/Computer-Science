@@ -314,13 +314,27 @@ single quataion allows for printing message with special characters as they are,
 23. Explain the usual roles of `.bash_profile` and `.bashrc`. State which type of shell normally reads each file. Inspect your system and report which of these files exist in your home directory; do not modify them.
 
 ```
+- the `.bash_profile` is read when a user first SSH into a remote machine to set the profile and program.
+- the `.bashrc` is read everytime a user enters a new shell, everytime a new shell starts like a subshell; the `.bashrc` is read to set up the shell functions, aliases, and customizations.
 
+ls -la ~ | grep -E '\.bash_profile|\.bashrc' -> searchs for the `.bash_profiles` and `.bashrc`.
+
+output:
+-rw-------   1 tbitangimana tbitangimana 3.7K Sep  8 13:26 .bashrc
+-rw-rw-r--   1 tbitangimana tbitangimana 3.8K Sep  8 13:34 .bashrce
 ```
 
 24. Display the Bash version and the Linux kernel version running on your system. Record the commands and briefly distinguish the two version numbers.
 
 ```
+bash --version -> Bash version
+GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
 
+uname -a -> Linux Kernel version
+Linux babbage 6.8.0-137-generic #137-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 17 20:28:23 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+
+- The Bash version is the version of the shell program that the user interacts with, it receives all the commands and provides the interactive environment.
+- The Linux Kernel is what the Bash program runs on, it manages the hardware, interacts with the file systems, memory, and handles system calls.
 ```
 
 ## Deliverables
