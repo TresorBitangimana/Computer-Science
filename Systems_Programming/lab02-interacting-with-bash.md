@@ -1,3 +1,5 @@
+# Tresor Bitangimana
+
 # Assignment 2 — Interacting with the Bash Shell
 
 ## Purpose
@@ -48,8 +50,7 @@ cd has to be a shell built-in command because it needs to be able to make change
 apropos archive -> serches for commands thats maches or have the keyword archive in its description
 
 relavant results:
-ar (1)               - create, modify, and extract from archives
-cpio (1)             - copy files to and from archives
+tar (1)              - an archiving utility
 ```
 
 3. Show how to obtain help for the Bash built-in `history`. Then show how to open the manual page for the external command `ls`. Explain why the documentation methods differ.
