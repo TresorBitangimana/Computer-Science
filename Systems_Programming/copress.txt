@@ -1,7 +1,10 @@
 
 
+~/.zshrc
+  - bashrc for mac
+
 tar -czvf archive.tar.gz directory_or_files
 - compress a file in one step
 
 tar -xzvf archive.tar.gz
-- de-compress it
+- de-compress it 

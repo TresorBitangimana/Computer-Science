@@ -1,11 +1,4 @@
-/**
- * @author Tresor Bitangimana
- * @since Date
- *        LinkedList
- */
-
-public class LinkedList<E extends Comparable<E>> {
-
+public class LinkedListExample<E> {
     // ---------------- nested Node class ----------------
     private static class Node<E> {
         private E data; // reference to the data stored at this node
@@ -34,10 +27,10 @@ public class LinkedList<E extends Comparable<E>> {
     private Node<E> tail = null; // last node of the list (or null if empty)
     private int size = 0; // number of nodes in the list
 
-    public LinkedList() {
+    public LinkedListExample() {
     } // constructs an initially empty list
+      // access methods
 
-    // access methods
     public int size() {
         return size;
     }
@@ -101,7 +94,7 @@ public class LinkedList<E extends Comparable<E>> {
         Node<E> prev;
         do {
             prev = p;
-            p = p.getNext();
+            p = p.next;
         } while (p != tail);
         tail = prev; // make the next to last item the last item
         prev.next = null;
@@ -114,9 +107,9 @@ public class LinkedList<E extends Comparable<E>> {
             return -1;
         Node<E> p = head;
         for (int i = 0; i < size; i++) {
-            if (e.equals(p.getData()))
+            if (e.equals(p.data))
                 return i;
-            p = p.getNext();
+            p = p.next;
         }
         return -1;
     }
@@ -125,81 +118,27 @@ public class LinkedList<E extends Comparable<E>> {
         return indexOf(e) >= 0;
     }
 
-    // Implement the following three methods
-    // Then implement the main method to test your solution as described in the
-    // assignment
-    // You may add private methods, but do not change anything above this
-
-    // compare the current linked list against the parameter
-    // the lists are equal if they contain the same data items in the same order
-    @Override
-    public boolean equals(Object o) {
-
-        // Node<E> one = (LinkedList.Node<E>) o;
-        // Node<E> p = head;
-
-        // if(o.size != size){
-        // return false;
-        // }
-        return false;
-    }
-
-    // return a comma delimited string containing the data items in the linked list
-    @Override
-    public String toString() {
-
-        String str = ""; // string initialization
-        Node<E> p = head;
-
-        if (size == 0) // if the size is 0 return, a null value if returned
-            return null;
-        else if (size == 1) // if size is 1, there is no need for a loop and the data is returned
-            return String.valueOf(head.getData());
-
-        for (int i = 0; i < size; i++) { // loops through the linked linked and combine
-                                         // all the data in the link as a single string
-            if (p.getNext() != null) {
-                // adds the data to the string with a comma if it is not the last node
-                str += String.valueOf(p.getData()) + ", ";
-
-            } else {
-                // adds the last data in the link without comma
-                str += String.valueOf(p.getData());
-            }
-            p = p.getNext(); // moves on to the next node
-        }
-
-        return str; // returns the final string.
-    }
-
-    // sort the linked list using insertion sort and changing only Node references
-    public void sort() {
-
-        Node<E> p = head;
-        if (size < 2) {
-            System.out.println("alrady sorted");
-        }
-
-        Node<E> start = p.getNext(); // creates a new list with only the head
-        head = p.getNext(); // sets the head of the old list to the next node: spliting the original list.
-
-        for (int i = 0; i < size; i++) {
-            // sort
-        }
-
-    }
-
     public static void main(String[] args) {
-
-        LinkedList<String> list = new LinkedList<String>();
+        LinkedListExample<String> list = new LinkedListExample<String>();
         list.addFirst("one");
-        list.addLast("two");
-        list.addLast("three");
-        list.addLast("four");
-        list.addLast("five");
-
-        System.out.println(list.toString());
-
+        list.addFirst("two");
+        list.addLast("zero");
+        System.out.println(list.indexOf("one"));
+        System.out.println(list.removeFirst());
+        System.out.println(list.indexOf("two"));
+        System.out.println(list.last());
+        System.out.println(list.first());
+        System.out.println(list.removeLast());
+        System.out.println(list.removeLast());
+        System.out.println();
+        LinkedList<Integer> listInts = new LinkedList<Integer>();
+        listInts.addFirst(1);
+        listInts.addFirst(2);
+        listInts.addLast(0);
+        System.out.println(listInts.contains(1));
+        System.out.println(listInts.removeFirst());
+        System.out.println(listInts.contains(2));
+        System.out.println(listInts.last());
+        System.out.println(listInts.first());
     }
-
 }
