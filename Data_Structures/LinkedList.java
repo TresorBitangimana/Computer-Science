@@ -1,3 +1,6 @@
+import java.util.Scanner;
+import java.util.concurrent.LinkedBlockingDeque;
+
 /**
  * @author Tresor Bitangimana
  * @since Date
@@ -135,13 +138,21 @@ public class LinkedList<E extends Comparable<E>> {
     @Override
     public boolean equals(Object o) {
 
-        // Node<E> one = (LinkedList.Node<E>) o;
-        // Node<E> p = head;
+        LinkedList<?> other = (LinkedList<?>) o; // assigns the incoming object o to oother assuming the
+                                                 // incomeing object is an instance of the LinkedList class
+        if (other.size != size) // returns false if the two linkedList do not have the same size
+            return false;
 
-        // if(o.size != size){
-        // return false;
-        // }
-        return false;
+        Node<E> p = head; // asslign the current LinkedList head to p
+        Node<?> q = other.head; // assigns the incomming LinkedList head to q
+
+        for (int i = 0; i < size; i++) {
+            if (p != q) // checks if nodes are not equal, if so returns false.
+                return false;
+            p.getNext(); // moves on to the next node
+            q.getNext();
+        }
+        return true; // returns true, all nodes are equal
     }
 
     // return a comma delimited string containing the data items in the linked list
@@ -174,31 +185,93 @@ public class LinkedList<E extends Comparable<E>> {
 
     // sort the linked list using insertion sort and changing only Node references
     public void sort() {
+        if (size < 2)
+            return;
 
-        Node<E> p = head;
-        if (size < 2) {
-            System.out.println("alrady sorted");
+        Node<E> sorted = null;
+        Node<E> current = head;
+
+        while (current != null) {
+            Node<E> next = current.getNext();
+
+            if (sorted == null || current.getData().compareTo(sorted.getData()) < 0) {
+                current.setNext(sorted);
+                sorted = current;
+            } else {
+                Node<E> s = sorted;
+                while (s.getNext() != null && s.getNext().getData().compareTo(current.getData()) <= 0) {
+                    s = s.getNext();
+                }
+                current.setNext(s.getNext());
+                s.setNext(current);
+            }
+
+            current = next;
         }
 
-        Node<E> start = p.getNext(); // creates a new list with only the head
-        head = p.getNext(); // sets the head of the old list to the next node: spliting the original list.
-
-        for (int i = 0; i < size; i++) {
-            // sort
+        head = sorted;
+        // update tail
+        if (head == null) {
+            tail = null;
+        } else {
+            Node<E> t = head;
+            while (t.getNext() != null)
+                t = t.getNext();
+            tail = t;
         }
-
     }
 
     public static void main(String[] args) {
 
-        LinkedList<String> list = new LinkedList<String>();
-        list.addFirst("one");
-        list.addLast("two");
-        list.addLast("three");
-        list.addLast("four");
-        list.addLast("five");
+        // class tasks
+        LinkedList<Integer> numList = new LinkedList<Integer>();
 
-        System.out.println(list.toString());
+        // creates the scanenr object for Systen.in input
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter list size: "); // prompts the user for the size of list n
+        int n = scanner.nextInt();
+        for (int i = 0; i < n; i++) { // iterates n times prompting the user to add an int to the list
+            System.out.print("Add an int to the list: ");
+            if (n == 0) { // if first item calls add first method
+                numList.addFirst(scanner.nextInt());
+            } else { // else calls addLast method
+                numList.addLast(scanner.nextInt());
+            }
+        }
+
+        numList.sort(); // sorts the numList
+        System.out.println(numList); // prints the list with the toString method
+
+        LinkedList<String> strList = new LinkedList<String>(); // creates a LinkedList that holds strings
+
+        System.out.print("Enter list size: "); // prompts the user for the size of list m
+        int m = scanner.nextInt();
+
+        for (int i = 0; i < m; i++) { // iterates m times prompting the user to add a string to the list
+            System.out.print("Add a string to the list: ");
+            if (m == 0) { // if first item calls add first method
+                strList.addFirst(scanner.next());
+            } else { // else calls addLast method
+                strList.addLast(scanner.next());
+            }
+        }
+        strList.sort(); // sorts the list
+        System.out.println(strList); // prints the list
+
+        // test the equals method using the LinkedList containing integers and
+        // the LinkedList containing Strings
+        System.out.println(numList.equals(strList));
+
+        // creates two equals Linkedlists containing integers
+        LinkedList<Integer> list1 = new LinkedList<>();
+        list1.addFirst(1);
+        list1.addLast(5);
+        list1.addLast(2);
+        list1.addLast(9);
+        LinkedList<Integer> list2 = list1;
+
+        System.out.println(list1.equals(list2));
 
     }
 
