@@ -12,11 +12,12 @@ public class Main {
         a.push(5);
         a.push(6);
 
-        for (int i = 0; i < a.size(); i++) {
-            System.out.println(a.peek());
-            a.pop();
-        }
+        // for (int i = 0; i < a.size(); i++) {
+        // System.out.println(a.peek());
+        // a.pop();
+        // }
 
+        System.out.println(a.peek());
         System.out.println(a.peek());
         System.out.println(a.isEmpty());
     }

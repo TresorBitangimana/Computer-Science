@@ -1,0 +1,93 @@
+All conditionals are in double [ and double ]
+
+[[ some conditional ]]
+
+
+1. Tet if file exists
+[[ -a ${file_name} ]]
+
+2. Test if a file exitsts and is a block special file
+[[ -b ${file_name} ]]
+
+3. Test if a file exists and is a character special file
+[[ -c ${file_name} ]]
+
+4. Test if a file exists and is a directory
+[[ -d ${file_name} ]]
+
+5. Test if a file exits
+[[ -e ${file_name} ]]
+
+6. Test if a file exists and is a symbolic link
+[[ -h ${file_name} ]]
+
+7. Test if a file exists and is readable
+[[ -r ${file_name} ]]
+
+8. Test if a file exists and has a size greater than zero
+[[ -s ${file_name} ]]
+
+9. Test if a file exitsts and is writeable
+[[ -w ${file_name} ]]
+
+10. Test if a file exists and is executable
+[[ -x ${file_name} ]]
+
+11. Test if a file exists and is a symbolic link
+[[ -L ${file_name} ]]
+
+
+
+12. Test if a shell variable varname is set (has been assigned a value)
+[[ -v ${varname} ]]
+
+13. Test if the length of a string is zero
+[[ -z ${string} ]]
+
+14. Test if the length of a string is non-zero
+[[ -n ${string} ]]
+
+15. Test if two strings are equal
+[[ ${string1} == ${string2} ]]
+
+16. Test if two strings are not equal
+[[ ${string1} != ${string2} ]]
+
+17. Test if string1 sorts after string2 lexicographically
+[[ ${string1} > ${string2} ]]
+
+18. Test if string1 sorts before string2 lexicographically
+[[ ${string1} < {string2} ]]
+
+
+
+19. Test if two numbers are equal
+[[ ${arg1} -eq ${arg2} ]]
+
+20. Test if two numbers are not equal
+[[ ${arg1} -ne ${arg2} ]]
+
+21. Test if arg1 is less than arg2
+[[ $arg1 -lt ${arg2} ]]
+
+22. Test if arg1 is less than or equal to arg2
+[[ ${arg1} -le ${arg2} ]]
+
+23. Test if arg1 is greater than arg2
+[[ ${arg1} -gt ${arg2} ]]
+
+24. Test if arg1 is greater than or equal to arg2
+[[ ${arg1} -ge ${arg2} ]]
+
+
+
+[[ test_case_1 ]] && [[test_case_2 ]]                     #And
+[[ test_case_1 ]] || [[test_case_2 ]]                     #Or
+
+25. Test if the command was successful without any errors
+[[ $? -eq 0 ]]
+
+26. Test if a command was not sucessful or had errors
+[[ $? -gt 0 ]]
+
+

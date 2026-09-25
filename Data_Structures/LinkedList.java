@@ -1,9 +1,8 @@
 import java.util.Scanner;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * @author Tresor Bitangimana
- * @since Date
+ * @since Sep 22 2026
  *        LinkedList
  */
 
@@ -185,30 +184,41 @@ public class LinkedList<E extends Comparable<E>> {
 
     // sort the linked list using insertion sort and changing only Node references
     public void sort() {
-        if (size < 2)
+        if (size < 2) // if size is less than 2 there is no need to sort
             return;
-
+        // sorted will point to the head of the sorted portion (initially null).
         Node<E> sorted = null;
+        // current iterates over the original list; each current node is
+        // extracted and inserted into sorted.
         Node<E> current = head;
 
-        while (current != null) {
+        while (current != null) { // process each node from the original list
+            // Save the next node because current will be relinked.
             Node<E> next = current.getNext();
 
+            // If sorted is empty, or current should be the new head of
+            // sorted, insert at front.
             if (sorted == null || current.getData().compareTo(sorted.getData()) < 0) {
                 current.setNext(sorted);
                 sorted = current;
             } else {
+                // Otherwise, find the insertion point: node s such that
+                // current should be placed after s.
                 Node<E> s = sorted;
+                // Advance while the next node in sorted is <= current.
                 while (s.getNext() != null && s.getNext().getData().compareTo(current.getData()) <= 0) {
                     s = s.getNext();
                 }
+                // Insert current after s by adjusting next references.
                 current.setNext(s.getNext());
                 s.setNext(current);
             }
 
+            // Move to the next node in the original list.
             current = next;
         }
 
+        // After all nodes processed, head becomes the head of the sorted list.
         head = sorted;
         // update tail
         if (head == null) {
@@ -271,7 +281,9 @@ public class LinkedList<E extends Comparable<E>> {
         list1.addLast(9);
         LinkedList<Integer> list2 = list1;
 
-        System.out.println(list1.equals(list2));
+        System.out.println(list1.equals(list2)); // tests the equality of the two integer LinkedLists
+
+        scanner.close();
 
     }
 
