@@ -41,7 +41,7 @@ All conditionals are in double [ and double ]
 12. Test if a shell variable varname is set (has been assigned a value)
 [[ -v ${varname} ]]
 
-13. Test if the length of a string is zero
+13. Test if the length of a   zero
 [[ -z ${string} ]]
 
 14. Test if the length of a string is non-zero

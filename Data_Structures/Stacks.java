@@ -1,4 +1,5 @@
 import java.util.Queue;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Stacks {
@@ -18,6 +19,9 @@ public class Stacks {
 
         String opString = "532*+";
         evaluate(opString);
+
+        // Queue<Integer> q = new LinkedList<Integer>();
+
     }
 
     public static void transfer(Stack<Integer> S, Stack<Integer> T) {
