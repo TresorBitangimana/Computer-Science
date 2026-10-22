@@ -1,0 +1,27 @@
+exam format:
+10 true/false
+10 multiple choice,
+10 fill in the blank
+    - definitions
+    - commands
+    -
+5 short answer
+2 shell scripts
+    bash scritps: learn to use input injection in bash
+    built from scratch
+1 cheat sheet / front and back printer paper 8.5in / 11in
+    inlcude: common options
+        -a ...
+
+numeric file access modifier
+binary
+octo numebr
+know: 
+    file user id, group id
+    access control enforment
+    figure 6.2
+
+redirection commands, look in textbook
+
+know the difference: = == -eq
+get-op

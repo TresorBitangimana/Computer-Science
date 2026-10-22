@@ -1,3 +1,6 @@
+
+$# -> numbers of comand line arguments
+
 All conditionals are in double [ and double ]
 
 [[ some conditional ]]
