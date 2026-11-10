@@ -1,0 +1,8 @@
+Write a C program that:
+    Generates 30 random numbers [1-99]
+    Compute the average
+    Finds the min
+    Finds the max
+    Sorts them
+    Prints them out
+    Usr procedure and functions

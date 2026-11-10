@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/treasure/Desktop/Computer_Science/stats'
+relocations:     []
+...

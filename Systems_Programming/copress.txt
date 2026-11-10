@@ -9,5 +9,5 @@ tar -czvf archive.tar.gz directory_or_files
 tar -xzvf archive.tar.gz
 - de-compress it 
 
-cp from server...
+copy files from server...
 scp tbitangimana@babbage.cs.tcu.edu:/home/tbitangimana/---path
