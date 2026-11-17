@@ -11,3 +11,9 @@ tar -xzvf archive.tar.gz
 
 copy files from server...
 scp tbitangimana@babbage.cs.tcu.edu:/home/tbitangimana/---path
+
+
+/SYSPROG-grade-analyzer
+
+
+grade-alayzer.c  grade-analyzer.c  grade.c  grade.h  grade.o  main.c  Makefile  README.md  sample-grades.csv  statistics.c  statistics.h
