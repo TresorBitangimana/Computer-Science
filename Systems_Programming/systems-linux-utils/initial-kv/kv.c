@@ -107,7 +107,7 @@ void db_put(int key, char *value){
         return;
     }
 
-    if(db_key_exists(key)){
+    if(!db_key_exists(key)){
         //write the perimeter key and value into the database file
         fprintf(database, "%d>%s\n", key, value);
     }else{ //key does already exists
@@ -124,6 +124,7 @@ void db_get(int key){
         fprintf(stderr, "could not open database\n");
         return;
     }
+
 
     char line[256];
     while(fgets(line, sizeof line, database) != NULL){
@@ -147,7 +148,110 @@ void db_get(int key){
 }
 
 void db_delete(int key){
+    FILE *database = fopen("database.txt", "r");
+    if(database == NULL){
+        fprintf(stderr, "could not open database\n");
+        return;
+    }
 
+    int capacity = 8;
+    int capacity_count = 0;
+    char **kv_db = calloc(capacity, sizeof(char *));
+    if(kv_db == NULL){
+        fclose(database);
+        return;
+    }
+
+    char line[256];
+    while(fgets(line, sizeof line, database) != NULL){ //while each line in the database is not equal to null
+        line[strcspn(line,"\n")] = '\0'; // strip the trailing newline
+
+        char *l = line;
+        char *curr_kv[2] = {NULL, NULL};
+        char *token;
+        int count = 0;
+
+        while(count < 2 && (token = strsep(&l, ">")) != NULL){  //break the line into individual key 
+                                                                //and value and stole them in   curr_kv
+            curr_kv[count++] = token; //insert the tokens into an array of length 2 with the indivudual tokens
+        }   
+        
+        if(capacity_count == capacity){ //kv_db is full so we need to double its size
+            int new_cap = capacity * 2;
+            char **temp = realloc(kv_db, new_cap * sizeof(char *));
+            if(temp == NULL){
+                perror("realloc");
+
+                for (int i = 0; i < capacity_count; i++) {
+                    free(kv_db[i]);
+                }
+                free(kv_db);
+                fclose(database);
+                return;
+            }
+            kv_db = temp;
+            capacity = new_cap;
+        }
+
+        if(atoi(curr_kv[0]) == key){   //if the perimeter key mateches the curr_kv key
+                                       //it needs to be removed so it will not be included in the list
+            continue;
+        }
+
+        // Allocate memory for the new entry
+        int entry_size = strlen(curr_kv[0]) + strlen(curr_kv[1]) + 2;
+
+        char *entry = malloc(entry_size);
+        if (entry == NULL) {
+            perror("malloc");
+            for (int i = 0; i < capacity_count; i++) {
+                free(kv_db[i]);
+            }
+            free(kv_db);
+            fclose(database);
+            return;
+        }
+
+        // Reconstruct key and value
+        snprintf(entry, entry_size, "%s>%s", curr_kv[0], curr_kv[1]);
+
+        kv_db[capacity_count] = entry;
+        capacity_count++;
+        count++;
+    }
+    fclose(database);
+    //after the loop that copies every entry in the 
+    //database except the one that need to be deleted
+    //we overide the database file to be empty and rewrite it with the entries in our kv_db array
+    FILE *db_overide = fopen("database.txt", "w");
+    if(db_overide == NULL){
+        fprintf(stderr, "could not open database\n");
+    }
+    fclose(db_overide);
+
+    //we write into the database
+    FILE *new_database = fopen("database.txt", "w");
+    if(new_database == NULL){
+        fprintf(stderr, "could not open database\n");
+    }
+
+    int index = 0;
+    while(1){
+        if(kv_db[index] != NULL){
+            fprintf(new_database,"%s\n", kv_db[index]);
+        }
+        else{
+            break;
+        }
+        index++;
+    }
+
+    for(int i = 0; i < capacity_count; i++){
+        free(kv_db[i]);
+    }
+    free(kv_db);
+    // fprintf(stdout,"K not found: %d\n", key); //key not found
+    fclose(new_database);
 }
 
 void db_clear(){ //opens and closes the file, it is an operation so it clear the file.
@@ -195,6 +299,8 @@ int db_key_exists(int key){
         return(1);
     }
 
+
+
     char line[256];
     while(fgets(line, sizeof line, database) != NULL){ //while each line in the database is not equal to null
         line[strcspn(line,"\n")] = '\0'; // strip the trailing newline
@@ -211,11 +317,13 @@ int db_key_exists(int key){
         if(atoi(curr_kv[0]) == key){ //if the perimeter key mateches the curr_kv key
                                 //a key already exists, so re return with 1
             fclose(database);
-            return(0); //return false
+            return(1); //return false
         }
     }
+
+    fprintf(stdout,"K not found: %d\n", key); //key not found
     fclose(database);
-    return(1); //no matching key was found, so we exit with a status code of 1 which is true
+    return(0); //no matching key was found, so we exit with a status code of 0 which is true
 }
 
 //varifies the command to make sure its a valid command
