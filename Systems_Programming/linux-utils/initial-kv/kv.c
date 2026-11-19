@@ -17,67 +17,23 @@ typedef struct{
     Data data;
 } Request;
 
-//creates a Node object that stores a Data object as data
-typedef struct Node {
-    Data data;
-    struct Node *next;
-} Node;
-
-typedef struct {
-    Node *top;
-} Stack;
-
-void stack_init(Stack *s){
-    s->top = NULL;
-}
-
-int empty_stack(Stack *s){
-    return s->top == NULL;
-} 
-
-//pushes a new node
-int stack_push(Stack *s, Data d){
-    Node *n = malloc(sizeof(Node));
-    if(n == NULL){
-        return -1;
-    }
-    n->data.key = d.key;
-    n->data.value = d.value;
-
-    n->next = s->top; //new node points and the old top
-    s->top = n;       //new node becomes the top
-    return(0);
-}
-
-// pops a node from a stack and returns its value
-Data *stack_pop(Stack *s){
-    if(s->top == NULL) return NULL;
-
-    Data *data = malloc(sizeof(Data));
-    if(data == NULL) return NULL;
-
-    Node *n = s->top;
-
-    data->key = n->data.key;
-    data->value = n->data.value;
-
-    s->top = n->next;
-    free(n);   // free the node only, not the string
-    return data;
+Request create_request(char command, int key, char *value){
+    Data data = {key, value};
+    Request request = {command, data};
+    return request;
 }
 
 //=======================================================================================
 // Function Headers
 //=======================================================================================
 
-void db_put(Data *data);
-Data *db_get(char *key);
-void db_delete(char *k);
-void db_clear();
-void db_all();
-int db_kv_exists();
-char *verify_tokens(char *tokens, char *request);
-
+void db_put(int key, char *value);
+void db_get(int key);
+void db_delete(int k);
+void db_clear(void);
+void db_all(void);
+int db_key_exists(int key);
+Request *verify_tokens(char *tokens[]);
 
 //=======================================================================================
 // Main function
@@ -94,93 +50,204 @@ int main(int argc, char *argv[]){
             fprintf(stderr,"database does not exists:\n Creating database......\n");
             database = fopen("database.txt", "w");
         }
-        fclose(database);
-        return(1);
+        if(database != NULL) fclose(database);
+        return(0);
     }
 
+    int user_arguments = argc-1;
     //will store invidual requestion, {command,{key, value}}
-    char *request = malloc(sizeof(Request));
+    Request **requests = calloc(user_arguments, sizeof *requests);
+    if(requests == NULL) return(1);
 
     
-    for(int i = 1; i < argc; i++){ //for all arguments
-        char *req = argv[i];
-        char *tokens[3];
+    for(int i = 0; i < user_arguments; i++){ //for all arguments
+        char *req = argv[i+1];
+        char *tokens[3] = {NULL, NULL, NULL};
         char *token;
         int count = 0;
 
-        while((token = strsep(&req, ",")) != NULL){ //break the arguments int individual tokens separated by ','
+        while(count < 3 && (token = strsep(&req, ",")) != NULL){ //break the arguments int individual tokens separated by ','
             tokens[count++] = token; //insert the tokens into an array of length 3 with the indivudual tokens
         }        
 
-        request = verify_tokens(tokens, request);
-
-        //separate individual arugments into tokens
-        //check the tokens to be char, int, string
-        //call approprivate functions
-        //create an request Object of the command, key, and value pair
-        //insert the Request Object into the array of Request objects
+        requests[i] = verify_tokens(tokens);
+        if(requests[i] == NULL ) continue;
 
     }
 
-    return(1);
+    for(int i = 0; i < user_arguments; i++){ //for every request (command line argument) the user inputs
+        char comm = requests[i]->command;
+        int key = requests[i]->data.key;
+        char *value = requests[i]->data.value;
+
+        switch(comm){
+            case 'p': db_put(key, value); break;
+            case 'g': db_get(key); break;
+            case 'd': db_delete(key); break;
+            case 'c': db_clear(); break;
+            case 'a': db_all(); break;
+        }
+    }
+
+    for(int i =0; i < user_arguments; i++)
+        free(requests[i]);
+    free(requests);
+
+    return(0);
 }
 
 //=======================================================================================
 // Functions
 //=======================================================================================
 
-void db_put(Data *data){
+void db_put(int key, char *value){
+    FILE *database = fopen("database.txt", "a");
+    if(database == NULL){
+        fprintf(stderr, "could not open database\n");
+        return;
+    }
+
+    if(db_key_exists(key)){
+        //write the perimeter key and value into the database file
+        fprintf(database, "%d>%s\n", key, value);
+    }else{ //key does already exists
+        fprintf(stderr, "key already exists: %d\n", key);
+    }
+
+    if(database != NULL )fclose(database);
+}
+
+void db_get(int key){
+
+    FILE *database = fopen("database.txt", "r");
+    if(database == NULL){
+        fprintf(stderr, "could not open database\n");
+        return;
+    }
+
+    char line[256];
+    while(fgets(line, sizeof line, database) != NULL){
+        line[strcspn(line, "\n")] = '\0'; //stri the trailing newline
+
+        char *l = line;
+        char *curr_kv[2] = {NULL, NULL};
+        char *token;
+        int count = 0;
+
+        while(count < 2 && (token = strsep(&l, ">")) != NULL){  //break the line into individual key 
+                                                                //and value and stole them in   curr_kv
+            curr_kv[count++] = token; //insert the tokens into an array of length 2 with the indivudual tokens
+        }
+
+        if(curr_kv[1] != NULL && atoi(curr_kv[0]) == key){
+            fprintf(stdout, "%s, %s\n", curr_kv[0], curr_kv[1]);
+        }
+    }
+    if(database != NULL) fclose(database);   
+}
+
+void db_delete(int key){
 
 }
 
-Data *db_get(char *key){
-
-    Data *data = malloc(sizeof(Data));
-
-    return data;
-}
-
-void db_delete(char *k){
-
-}
-
-void db_clear(){
-
+void db_clear(){ //opens and closes the file, it is an operation so it clear the file.
+    FILE *database = fopen("database.txt", "w");
+    if(database == NULL){
+        fprintf(stderr, "could not open database\n");
+        return;
+    }
+    if(database != NULL) fclose(database);
 }
 
 void db_all(){
+    FILE *database = fopen("database.txt", "r");
+    if(database == NULL){
+        fprintf(stderr, "could not open database\n");
+        return;
+    }
 
-}
+    char line[256];
+    while(fgets(line, sizeof line, database) != NULL){
+        line[strcspn(line, "\n")] = '\0'; //stri the trailing newline
 
-int db_kv_exists(){
-    return(0);
-}
+        char *l = line;
+        char *curr_kv[2] = {NULL, NULL};
+        char *token;
+        int count = 0;
 
-char *verify_tokens(char *tokens, char *request){
-    char *verified_tokens = malloc(sizeof(char *));
-    char valid_commands[5] = {'p','g','a','c','d'};
+        while(count < 2 && (token = strsep(&l, ">")) != NULL){  //break the line into individual key 
+                                                                //and value and stole them in   curr_kv
+            curr_kv[count++] = token; //insert the tokens into an array of length 2 with the indivudual tokens
+        }
 
-    char command = tokens[1];
-    // char key = tokens[2];
-    // int value = tokens[3];
-    int k = 0;
-    // int c = 0; 
-    // int v = 0;
-
-    for(int i = 0; i < 5; i++){ //checks if the command is equal to any of the valid commands
-        if(command == valid_commands[i]){
-            k = 1;
+        if(curr_kv[1] != NULL){
+            fprintf(stdout, "%s, %s\n", curr_kv[0], curr_kv[1]);
         }
     }
+    if(database != NULL) fclose(database);  
+}
 
-    if(k){
-        //adds token the request
-        return request;
+int db_key_exists(int key){
+
+    FILE *database = fopen("database.txt", "r");
+    if(database == NULL){
+        fprintf(stderr, "could not open database\n");
+        return(1);
     }
 
-    char * faild_token = strcat(tokens[0], tokens[1]);
-    faild_token = strcat(faild_token, tokens[3]);
+    char line[256];
+    while(fgets(line, sizeof line, database) != NULL){ //while each line in the database is not equal to null
+        line[strcspn(line,"\n")] = '\0'; // strip the trailing newline
 
-    fprintf(stderr, "Error: fail token: %s", faild_token); //prints the failed token to std out.
-    return request; //returns the request without the token with error
+        char *l = line;
+        char *curr_kv[2] = {NULL, NULL};
+        char *token;
+        int count = 0;
+
+        while(count < 2 && (token = strsep(&l, ">")) != NULL){  //break the line into individual key 
+                                                                //and value and stole them in   curr_kv
+            curr_kv[count++] = token; //insert the tokens into an array of length 2 with the indivudual tokens
+        }      
+        if(atoi(curr_kv[0]) == key){ //if the perimeter key mateches the curr_kv key
+                                //a key already exists, so re return with 1
+            fclose(database);
+            return(0); //return false
+        }
+    }
+    fclose(database);
+    return(1); //no matching key was found, so we exit with a status code of 1 which is true
+}
+
+//varifies the command to make sure its a valid command
+Request *verify_tokens(char *tokens[]){
+    char command = tokens[0][0];
+    int key = 0;
+    if(tokens[1] != NULL) key = atoi(tokens[1]);
+
+
+    char *value = "";
+    if(tokens[2] != NULL) value = tokens[2];
+    int k = 0;
+
+    if(command != '\0' && strchr("pgdca", command) != NULL){ //checks if the command char matches the valid chars
+        k = 1;
+    } 
+
+    if(k){
+        //adds tokens the request
+        // Request req = create_request(command, key, value);
+
+        Request *req = malloc(sizeof(Request));
+        if(req == NULL) return NULL;
+        *req = create_request(command, key, value);
+        return req;
+    }
+
+    //prints the failed token to stderr
+    fprintf(stderr, "Error: fail token: %s,%s,%s\n",
+            tokens[0] ? tokens[0] : "",
+            tokens[1] ? tokens[1] : "",
+            tokens[2] ? tokens[2] : "");
+
+    return NULL; //returns the request without the token with error
 }
