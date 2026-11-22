@@ -93,7 +93,7 @@ int main(int argc, char *argv[]){
 void db_put(int key, char *value){
     FILE *database = fopen("database.txt", "a");
     if(database == NULL){
-        fprintf(stderr, "could not open database\n");
+        fprintf(stdout, "%d not found\n", key);
         return;
     }
 
@@ -111,7 +111,7 @@ void db_get(int key){
 
     FILE *database = fopen("database.txt", "r");
     if(database == NULL){
-        fprintf(stderr, "could not open database\n");
+        fprintf(stdout, "could not open database\n");
         return;
     }
 
@@ -346,6 +346,7 @@ Request *verify_tokens(char *tokens[]){
         return req;
     }
 
+    printf("bad command\n");
     //prints the failed token to stderr
     fprintf(stderr, "Error: fail token: %s,%s,%s\n",
             tokens[0] ? tokens[0] : "",
