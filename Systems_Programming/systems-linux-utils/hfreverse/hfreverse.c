@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+
+int same_file(const char *a, const char *b) { //checks if files are the same or hardlinks
+    struct stat sa, sb;
+    if (stat(a, &sa) != 0 || stat(b, &sb) != 0) return 0; 
+    return sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
+}
 
 int main(int argc, char *argv[]){
 
@@ -13,7 +20,8 @@ int main(int argc, char *argv[]){
     //checks if the program has 3 argument, then checks if the two files are the same
     //returns an error and status code of 1 of the two argument files are the same
     if(argc == 3){
-        if(strcmp(argv[1], argv[2]) == 0){ //strcmp compares two files
+        if(strcmp(argv[1], argv[2]) == 0 || same_file(argv[1], argv[2]) == 1){   //strcmp compares two filesif they are 
+                                                                            //the same, also if they are hardlinks
             fprintf(stderr, "error: input and output file must differ\n");
             return(1);
         }
@@ -94,3 +102,4 @@ int main(int argc, char *argv[]){
     
     return(0);
 }
+
