@@ -55,8 +55,8 @@ void compress(FILE *f_in, FILE *f_out,int *char_check, int *count){
         }
         else{
             if(*char_check != EOF){
-                fwrite(count, sizeof(*count), 1, f_out);
-                fputc(*char_check, f_out);
+                fwrite(count, sizeof(*count), 1, f_out);  //copies raw bytes from memory to the output.
+                fputc(*char_check, f_out); //writes one character as a single byte.
             }
             *char_check = curr_c;
             *count = 1;
